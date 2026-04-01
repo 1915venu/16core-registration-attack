@@ -1,0 +1,47 @@
+gnodeb:
+  controlif:
+    ip: "@HOST_IP@"
+    port: "@GNB_PORT@"
+  dataif:
+    ip: "0.0.0.0"
+    port: 2152
+  plmnlist:
+    mcc: "999"
+    mnc: "70"
+    tac: "000001"
+    gnbid: "@GNB_ID@"
+  slicesupportlist:
+    sst: "01"
+    sd: "ffffff"
+ue:
+  hplmn:
+    mcc: "999"
+    mnc: "70"
+  msin: "@MSIN_START@"
+  routingindicator: "0000"
+  protectionScheme: 0
+  homeNetworkPublicKey: "5a8d38864820197c3394b92613b20b91633cbd897119273bf8e4a6f4eec0a650"
+  homeNetworkPublicKeyID: 1
+  key: "465B5CE8B199B49FAA5F0A2EE238A6BC"
+  opc: "E8ED289DEBA952E4283B54E88E6183CA"
+  amf: "8000"
+  sqn: "00000000"
+  dnn: "internet"
+  snssai:
+    sst: "01"
+    sd: "ffffff"
+  integrity:
+    nia0: false
+    nia1: true
+    nia2: true
+    nia3: false
+  ciphering:
+    nea0: true
+    nea1: true
+    nea2: true
+    nea3: false
+amfif:
+  - ip: "@AMF_IP@"
+    port: 38412
+logs:
+  level: 4

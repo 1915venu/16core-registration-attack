@@ -1,0 +1,3 @@
+FROM packetrusher-attack:v19
+RUN mkdir -p /tmp/config-template
+COPY config.yml /tmp/config-template/config.yml

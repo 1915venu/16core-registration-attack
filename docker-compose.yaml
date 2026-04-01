@@ -1,0 +1,87 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    volumes:
+      - ./mongo-dump:/tmp/mongo-dump
+    network_mode: "host"
+    restart: always
+
+  open5gs-nrf:
+    image: gradiant/open5gs:2.7.5
+    container_name: open5gs-nrf
+    command: open5gs-nrfd
+    volumes:
+      - ./config/nrf.yaml:/opt/open5gs/etc/open5gs/nrf.yaml
+    depends_on:
+      - mongodb
+    network_mode: "host"
+    restart: always
+
+  open5gs-udr:
+    image: gradiant/open5gs:2.7.5
+    container_name: open5gs-udr
+    command: open5gs-udrd
+    volumes:
+      - ./config/udr.yaml:/opt/open5gs/etc/open5gs/udr.yaml
+    depends_on:
+      - mongodb
+      - open5gs-nrf
+    environment:
+      - DB_URI=mongodb://127.0.0.1/open5gs
+    network_mode: "host"
+    restart: always
+
+  open5gs-udm:
+    image: gradiant/open5gs:2.7.5
+    container_name: open5gs-udm
+    command: open5gs-udmd
+    volumes:
+      - ./config/udm.yaml:/opt/open5gs/etc/open5gs/udm.yaml
+    depends_on:
+      - mongodb
+      - open5gs-nrf
+      - open5gs-udr
+    environment:
+      - DB_URI=mongodb://127.0.0.1/open5gs
+    network_mode: "host"
+    restart: always
+
+  open5gs-pcf:
+    image: gradiant/open5gs:2.7.5
+    container_name: open5gs-pcf
+    command: open5gs-pcfd
+    volumes:
+      - ./config/pcf.yaml:/opt/open5gs/etc/open5gs/pcf.yaml
+    depends_on:
+      - mongodb
+      - open5gs-nrf
+    environment:
+      - DB_URI=mongodb://127.0.0.1/open5gs
+    network_mode: "host"
+    restart: always
+
+  open5gs-ausf:
+    image: gradiant/open5gs:2.7.5
+    container_name: open5gs-ausf
+    command: open5gs-ausfd
+    volumes:
+      - ./config/ausf.yaml:/opt/open5gs/etc/open5gs/ausf.yaml
+    depends_on:
+      - open5gs-nrf
+    network_mode: "host"
+    restart: always
+
+  open5gs-amf:
+    image: gradiant/open5gs:2.7.5
+    container_name: open5gs-amf
+    command: open5gs-amfd
+    volumes:
+      - ./config/amf.yaml:/opt/open5gs/etc/open5gs/amf.yaml
+    depends_on:
+      - open5gs-nrf
+      - open5gs-ausf
+      - open5gs-udm
+      - open5gs-pcf
+    network_mode: "host"
+    restart: always
